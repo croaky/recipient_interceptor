@@ -31,12 +31,14 @@ describe RecipientInterceptor do
       delivery_method :test
     end
 
-    Mail.deliver do
+    mail = Mail.deliver do
       from 'original.from@example.com'
       to 'original.to@example.com'
       cc 'original.cc@example.com'
       bcc 'original.bcc@example.com'
-    end.deliver!
+    end
+
+    mail.deliver!
   end
 
   def recipient_array
