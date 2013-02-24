@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = 'recipient_interceptor'
-  s.version = '0.1.0'
+  s.version = '0.1.1'
   s.authors = ['Dan Croak']
-  s.email = 'support@thoughtbot.com'
-  s.homepage = 'http://github.com/thoughtbot/recipient_interceptor'
+  s.email = 'dan@thoughtbot.com'
+  s.homepage = 'http://github.com/croaky/recipient_interceptor'
   s.summary = 'Intercept recipients when delivering email with the Mail gem.'
   s.description = <<-eos
     Use RecipientInterceptor when you don't want your Ruby program to
