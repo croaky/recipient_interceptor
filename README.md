@@ -1,11 +1,7 @@
-RecipientInterceptor
-====================
+recipient_interceptor
+=====================
 
-[![Build Status](https://secure.travis-ci.org/croaky/recipient_interceptor.png)](http://travis-ci.org/croaky/recipient_interceptor?branch=master)
-[![Code Quality](https://codeclimate.com/badge.png)](https://codeclimate.com/github/croaky/recipient_interceptor)
-
-Use RecipientInterceptor when you don't want your Ruby program to accidentally
-send emails to addresses other than those on a whitelist which you configure.
+Never accidentally send emails to real people from your staging environment.
 
 Rails example
 -------------
@@ -25,10 +21,16 @@ Command line:
 
     heroku config:add EMAIL_RECIPIENTS="staging@example.com" --remote staging
 
+Links
+-----
+
+[![Build Status](https://secure.travis-ci.org/croaky/recipient_interceptor.png)](http://travis-ci.org/croaky/recipient_interceptor?branch=master)
+[![Code Quality](https://codeclimate.com/badge.png)](https://codeclimate.com/github/croaky/recipient_interceptor)
+
 Credits
 -------
 
-RecipientInterceptor is maintained by Dan Croak and
+recipient_interceptor is maintained by Dan Croak and
 [contributors](/croaky/recipient_interceptor/contributors) like you.
 
 License
