@@ -1,5 +1,5 @@
-RecipientInterceptor
-====================
+recipient_interceptor
+=====================
 
 Never accidentally send emails to real people from your staging environment.
 
@@ -30,7 +30,7 @@ Links
 Credits
 -------
 
-RecipientInterceptor is maintained by Dan Croak and
+recipient_interceptor is maintained by Dan Croak and
 [contributors](/croaky/recipient_interceptor/contributors) like you.
 
 License
