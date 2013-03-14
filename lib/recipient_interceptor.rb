@@ -6,10 +6,10 @@ class RecipientInterceptor
   end
 
   def delivering_email(message)
-    add_custom_headers message
-    message.to = @recipients
-    message.cc = nil
-    message.bcc = nil
+    message     = add_custom_headers(message)
+    message.to  = @recipients
+    message.cc  = []
+    message.bcc = []
   end
 
   private
@@ -28,11 +28,11 @@ class RecipientInterceptor
       'X-Intercepted-Cc' => message.cc,
       'X-Intercepted-Bcc' => message.bcc
     }.each do |header, addresses|
-      if addresses
-        addresses.each do |address|
-          message.header = "#{message.header}\n#{header}: #{address}"
-        end
-      end
+      addresses.each do |address|
+        message.header = "#{message.header}\n#{header}: #{address}"
+      end if addresses
     end
+
+    message
   end
 end
