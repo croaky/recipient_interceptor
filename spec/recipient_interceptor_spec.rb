@@ -1,44 +1,45 @@
 require File.join(File.dirname(__FILE__), '..', 'lib', 'recipient_interceptor')
 
 describe RecipientInterceptor do
-  it 'overrides to/cc/bcc fields, copies original fields to custom headers' do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+  it 'overrides to/cc/bcc fields' do
+    Mail.register_interceptor(RecipientInterceptor)
+
+    RecipientInterceptor.recipients = recipient_string
 
     response = deliver_mail
 
     expect(response.to).to eq [recipient_string]
     expect(response.cc).to eq []
     expect(response.bcc).to eq []
+  end
+
+  it 'copies original to/cc/bcc fields to custom headers' do
+    Mail.register_interceptor(RecipientInterceptor)
+
+    RecipientInterceptor.recipients = recipient_string
+
+    response = deliver_mail
 
     expect(custom_header(response, 'X-Intercepted-To')).
-      to eq ['original.to@example.com', 'staging@example.com']
+      to eq 'original.to@example.com'
     expect(custom_header(response, 'X-Intercepted-Cc')).
       to eq 'original.cc@example.com'
     expect(custom_header(response, 'X-Intercepted-Bcc')).
       to eq 'original.bcc@example.com'
   end
 
-  it 'accepts an array of recipients' do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_array)
+  describe '.recipients=' do
+    it 'accepts a string of recipients' do
+      RecipientInterceptor.recipients = recipient_string
 
-    response = deliver_mail
-
-    expect(response.to).to eq recipient_array
-  end
-
-  def deliver_mail
-    Mail.defaults do
-      delivery_method :test
+      expect(RecipientInterceptor.recipients).to eq [recipient_string]
     end
 
-    mail = Mail.deliver do
-      from 'original.from@example.com'
-      to 'original.to@example.com'
-      cc 'original.cc@example.com'
-      bcc 'original.bcc@example.com'
-    end
+    it 'accepts an array of recipients' do
+      RecipientInterceptor.recipients = recipient_array
 
-    mail.deliver!
+      expect(RecipientInterceptor.recipients).to eq recipient_array
+    end
   end
 
   def recipient_string
@@ -47,6 +48,19 @@ describe RecipientInterceptor do
 
   def recipient_array
     ['one@example.com', 'two@example.com']
+  end
+
+  def deliver_mail
+    mail = Mail.new do
+      from 'original.from@example.com'
+      to   'original.to@example.com'
+      cc   'original.cc@example.com'
+      bcc  'original.bcc@example.com'
+    end
+
+    mail.delivery_method :test
+
+    mail.deliver!
   end
 
   def custom_header(response, name)
