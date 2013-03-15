@@ -8,8 +8,8 @@ class RecipientInterceptor
   def delivering_email(message)
     add_custom_headers message
     message.to = @recipients
-    message.cc = nil
-    message.bcc = nil
+    message.cc = []
+    message.bcc = []
   end
 
   private
