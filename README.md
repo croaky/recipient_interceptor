@@ -1,6 +1,9 @@
 RecipientInterceptor
 ====================
 
+[![Build Status](https://secure.travis-ci.org/croaky/recipient_interceptor.png)](http://travis-ci.org/croaky/recipient_interceptor?branch=master)
+[![Code Quality](https://codeclimate.com/badge.png)](https://codeclimate.com/github/croaky/recipient_interceptor)
+
 Never accidentally send emails to real people from your staging environment.
 
 Rails example
@@ -9,23 +12,17 @@ Rails example
 Send all staging emails to a group email address without accidentally emailing
 users with active email addresses in the database.
 
-`Gemfile`:
+In `Gemfile`:
 
     gem 'recipient_interceptor'
 
-`config/environments/staging.rb`:
+In `config/environments/staging.rb`:
 
     Mail.register_interceptor RecipientInterceptor.new(ENV['EMAIL_RECIPIENTS'])
 
-Command line:
+From the command line:
 
     heroku config:add EMAIL_RECIPIENTS="staging@example.com" --remote staging
-
-Links
------
-
-[![Build Status](https://secure.travis-ci.org/croaky/recipient_interceptor.png)](http://travis-ci.org/croaky/recipient_interceptor?branch=master)
-[![Code Quality](https://codeclimate.com/badge.png)](https://codeclimate.com/github/croaky/recipient_interceptor)
 
 Credits
 -------
