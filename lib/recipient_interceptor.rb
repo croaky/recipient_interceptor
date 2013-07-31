@@ -1,12 +1,14 @@
 require 'mail'
 
 class RecipientInterceptor
-  def initialize(recipients)
+  def initialize(recipients, options = {})
     @recipients = normalize_to_array(recipients)
+    @subject_prefix = options[:subject_prefix]
   end
 
   def delivering_email(message)
     add_custom_headers message
+    add_subject_prefix message
     message.to = @recipients
     message.cc = []
     message.bcc = []
@@ -19,6 +21,12 @@ class RecipientInterceptor
       recipients.split ','
     else
       recipients
+    end
+  end
+
+  def add_subject_prefix(message)
+    if @subject_prefix
+      message.subject = "#{@subject_prefix} #{message.subject}"
     end
   end
 

@@ -40,6 +40,25 @@ describe RecipientInterceptor do
     expect(response.to).to eq [recipient_string]
   end
 
+  it 'does not prefix subject by default' do
+    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+
+    response = deliver_mail
+
+    expect(response.subject).to eq 'some subject'
+  end
+
+  it 'prefixes subject when given' do
+    Mail.register_interceptor RecipientInterceptor.new(
+      recipient_string,
+      subject_prefix: '[STAGING]'
+    )
+
+    response = deliver_mail
+
+    expect(response.subject).to eq '[STAGING] some subject'
+  end
+
   def recipient_string
     'staging@example.com'
   end
@@ -58,6 +77,7 @@ describe RecipientInterceptor do
       to 'original.to@example.com'
       cc 'original.cc@example.com'
       bcc 'original.bcc@example.com'
+      subject 'some subject'
     end
   end
 
@@ -65,7 +85,7 @@ describe RecipientInterceptor do
     header = response.header[name]
 
     if header.respond_to?(:map)
-      header.map { |header| header.value.wrapped_string }
+      header.map { |h| h.value.wrapped_string }
     else
       header.to_s
     end

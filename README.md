@@ -24,6 +24,16 @@ From the command line:
 
     heroku config:add EMAIL_RECIPIENTS="staging@example.com" --remote staging
 
+Options
+-------
+
+Optionally prefix the subject line:
+
+    Mail.register_interceptor RecipientInterceptor.new(
+      ENV['EMAIL_RECIPIENTS'],
+      subject_prefix: '[STAGING]'
+    )
+
 Credits
 -------
 
