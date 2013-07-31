@@ -1,12 +1,14 @@
 require 'mail'
 
 class RecipientInterceptor
-  def initialize(recipients)
+  def initialize(recipients, subject_prefix = "")
     @recipients = normalize_to_array(recipients)
+    @subject_prefix = subject_prefix
   end
 
   def delivering_email(message)
     add_custom_headers message
+    add_subject_prefix message
     message.to = @recipients
     message.cc = []
     message.bcc = []
@@ -22,6 +24,10 @@ class RecipientInterceptor
     end
   end
 
+  def add_subject_prefix(message)
+    message.subject = "#{@subject_prefix}#{message.subject}"
+  end
+  
   def add_custom_headers(message)
     {
       'X-Intercepted-To' => message.to || [],
