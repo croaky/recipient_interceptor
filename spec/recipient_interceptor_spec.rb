@@ -39,6 +39,14 @@ describe RecipientInterceptor do
 
     expect(response.to).to eq [recipient_string]
   end
+  
+  it 'accepts a subject prefix' do
+    Mail.register_interceptor RecipientInterceptor.new(recipient_string, '[PREFIX] ')
+
+    response = deliver_mail
+
+    expect(response.subject).to eq '[PREFIX] some subject'
+  end
 
   def recipient_string
     'staging@example.com'
@@ -58,6 +66,7 @@ describe RecipientInterceptor do
       to 'original.to@example.com'
       cc 'original.cc@example.com'
       bcc 'original.bcc@example.com'
+      subject 'some subject'
     end
   end
 
