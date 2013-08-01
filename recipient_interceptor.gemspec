@@ -19,5 +19,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.summary = 'Intercept recipients when delivering email with the Mail gem.'
   spec.test_files = ['spec/recipient_interceptor_spec.rb']
-  spec.version = '0.1.1'
+  spec.version = '0.1.2'
 end
