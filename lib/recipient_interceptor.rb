@@ -37,7 +37,7 @@ class RecipientInterceptor
       'X-Intercepted-Bcc' => message.bcc || []
     }.each do |header, addresses|
       addresses.each do |address|
-        message.header = "#{message.header}\n#{header}: #{address}"
+        message.header = "#{message.header}#{header}: #{address}"
       end
     end
   end
