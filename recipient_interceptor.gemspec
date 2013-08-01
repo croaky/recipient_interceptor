@@ -14,7 +14,6 @@ Gem::Specification.new do |spec|
   spec.email = 'dan@thoughtbot.com'
   spec.files = ['lib/recipient_interceptor.rb']
   spec.homepage = 'http://github.com/croaky/recipient_interceptor'
-  spec.license = 'MIT'
   spec.name = 'recipient_interceptor'
   spec.require_paths = ['lib']
   spec.summary = 'Intercept recipients when delivering email with the Mail gem.'
