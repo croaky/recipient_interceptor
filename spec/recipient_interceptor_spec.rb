@@ -59,6 +59,17 @@ describe RecipientInterceptor do
     expect(response.subject).to eq '[STAGING] some subject'
   end
 
+  it 'prefixes subject with result of prefix_subject block' do
+    Mail.register_interceptor RecipientInterceptor.new(
+      recipient_string,
+      subject_prefix: lambda{ |message| "[#{Array(message.to).join ','}]" }
+    )
+
+    response = deliver_mail
+
+    expect(response.subject).to eq '[original.to@example.com] some subject'
+  end
+
   def recipient_string
     'staging@example.com'
   end

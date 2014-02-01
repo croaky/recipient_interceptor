@@ -26,7 +26,10 @@ class RecipientInterceptor
 
   def add_subject_prefix(message)
     if @subject_prefix
-      message.subject = "#{@subject_prefix} #{message.subject}"
+      prefix = @subject_prefix
+      prefix = prefix.call message if prefix.respond_to? :call
+
+      message.subject = "#{prefix} #{message.subject}"
     end
   end
 
