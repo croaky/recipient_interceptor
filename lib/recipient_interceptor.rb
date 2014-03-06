@@ -4,9 +4,11 @@ class RecipientInterceptor
   def initialize(recipients, options = {})
     @recipients = normalize_to_array(recipients)
     @subject_prefix = options[:subject_prefix]
+    @condition = options[:condition]
   end
 
   def delivering_email(message)
+    return if @condition && !@condition.call(message)
     add_custom_headers message
     add_subject_prefix message
     message.to = @recipients

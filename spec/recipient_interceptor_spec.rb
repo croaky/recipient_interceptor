@@ -59,6 +59,42 @@ describe RecipientInterceptor do
     expect(response.subject).to eq '[STAGING] some subject'
   end
 
+  describe 'with a :condition option' do
+
+    it 'does not intercept if condition proc evaluate to false' do
+      Mail.register_interceptor RecipientInterceptor.new(
+        recipient_string,
+        condition: lambda { |m| false }
+        )
+
+      response = deliver_mail
+
+      expect(response.to).to eq ['original.to@example.com']
+    end
+
+    it 'does intercept if condition proc evaluate to true' do
+      Mail.register_interceptor RecipientInterceptor.new(
+        recipient_string,
+        condition: lambda { |m| true }
+        )
+
+      response = deliver_mail
+
+      expect(response.to).to eq [recipient_string]
+    end
+
+    it 'pass the message object to the condition proc' do
+      Mail.register_interceptor RecipientInterceptor.new(
+        recipient_string,
+        condition: lambda { |m| m.to == ['original.to@example.com'] }
+        )
+
+      response = deliver_mail
+
+      expect(response.to).to eq [recipient_string]
+    end
+  end
+
   def recipient_string
     'staging@example.com'
   end

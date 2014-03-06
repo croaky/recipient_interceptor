@@ -34,6 +34,14 @@ Optionally prefix the subject line:
       subject_prefix: '[STAGING]'
     )
 
+Optionally intercept emails :
+
+    Mail.register_interceptor RecipientInterceptor.new(
+      ENV['EMAIL_RECIPIENTS'],
+      condition: lambda { |message| message.subject =~ /Error/ } # if the condition proc return true the email is intercepted
+    )
+
+
 Credits
 -------
 
