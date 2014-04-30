@@ -40,6 +40,98 @@ describe RecipientInterceptor do
     expect(response.to).to eq [recipient_string]
   end
 
+  context 'given an email white-list' do
+    context 'for emails with one recipient' do
+      it 'does not override the to field for a white-listed email' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          email_whitelist: ['original@whitelisted.com']
+        )
+
+        response = deliver_mail to: 'original@whitelisted.com'
+        expect(response.to).to eq ['original@whitelisted.com']
+      end
+
+      it 'overrides the to field for a non-white-listed email' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          email_whitelist: ['original@whitelisted.com']
+        )
+
+        response = deliver_mail to: 'original@blacklisted.com'
+        expect(response.to).to eq ['override@whitelisted.com']
+      end
+    end
+
+    context 'for emails with multiple recipients' do
+      it 'strips non-white-listed emails, leaving white-listed ones' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          email_whitelist: ['original@whitelisted.com']
+        )
+
+        response = deliver_mail to: ['original@whitelisted.com', 'other@whitelisted.com']
+        expect(response.to).to eq ['original@whitelisted.com']
+      end
+
+      it 'replaces all recipients when none is white-listed' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          email_whitelist: ['original@whitelisted.com']
+        )
+
+        response = deliver_mail to: ['original@blacklisted.com', 'other@whitelisted.com']
+        expect(response.to).to eq ['override@whitelisted.com']
+      end
+    end
+  end
+
+  context 'given an domain white-list' do
+    context 'for emails with one recipient' do
+      it 'does not override the to field for a white-listed email' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          domain_whitelist: ['whitelisted.com']
+        )
+
+        response = deliver_mail to: 'original@whitelisted.com'
+        expect(response.to).to eq ['original@whitelisted.com']
+      end
+
+      it 'overrides the to field for a non-white-listed email' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          domain_whitelist: ['whitelisted.com']
+        )
+
+        response = deliver_mail to: 'original@blacklisted.com'
+        expect(response.to).to eq ['override@whitelisted.com']
+      end
+    end
+
+    context 'for emails with multiple recipients' do
+      it 'strips non-white-listed emails, leaving white-listed ones' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          domain_whitelist: ['whitelisted.com']
+        )
+
+        response = deliver_mail to: ['original@whitelisted.com', 'other@whitelisted.com', 'other@blacklisted.com']
+        expect(response.to).to eq ['original@whitelisted.com', 'other@whitelisted.com']
+      end
+
+      it 'replaces all recipients when none is white-listed' do
+        Mail.register_interceptor RecipientInterceptor.new(
+          'override@whitelisted.com',
+          domain_whitelist: ['whitelisted.com']
+        )
+
+        response = deliver_mail to: ['original@blacklisted.com', 'other@blacklisted.com']
+        expect(response.to).to eq ['override@whitelisted.com']
+      end
+    end
+  end
+
   it 'does not prefix subject by default' do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
@@ -67,17 +159,17 @@ describe RecipientInterceptor do
     ['one@example.com', 'two@example.com']
   end
 
-  def deliver_mail
+  def deliver_mail(options = {})
     Mail.defaults do
       delivery_method :test
     end
 
     Mail.deliver do
-      from 'original.from@example.com'
-      to 'original.to@example.com'
-      cc 'original.cc@example.com'
-      bcc 'original.bcc@example.com'
-      subject 'some subject'
+      from options.fetch(:from, 'original.from@example.com')
+      to options.fetch(:to, 'original.to@example.com')
+      cc options.fetch(:cc, 'original.cc@example.com')
+      bcc options.fetch(:bcc, 'original.bcc@example.com')
+      subject options.fetch(:subject, 'some subject')
     end
   end
 

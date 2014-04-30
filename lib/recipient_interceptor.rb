@@ -1,15 +1,18 @@
 require 'mail'
 
 class RecipientInterceptor
+
   def initialize(recipients, options = {})
     @recipients = normalize_to_array(recipients)
+    @email_whitelist = options[:email_whitelist] || []
+    @domain_whitelist = options[:domain_whitelist] || []
     @subject_prefix = options[:subject_prefix]
   end
 
   def delivering_email(message)
     add_custom_headers message
     add_subject_prefix message
-    message.to = @recipients
+    message.to = sanitize_recipients(message)
     message.cc = []
     message.bcc = []
   end
@@ -41,4 +44,25 @@ class RecipientInterceptor
       end
     end
   end
+
+  def sanitize_recipients(message)
+    recipients = message.to
+    sanitized_recipients = recipients.select { |email| whitelisted?(email) }
+    sanitized_recipients.any? ? sanitized_recipients : @recipients
+  end
+
+  def whitelisted?(email)
+    whitelisted_email?(email) || whitelisted_domain?(email)
+  end
+
+  def whitelisted_email?(email)
+    @email_whitelist.include?(email)
+  end
+
+  def whitelisted_domain?(email)
+    @domain_whitelist.any? do |domain|
+      email =~ /@#{domain}$/
+    end
+  end
+
 end
