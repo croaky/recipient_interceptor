@@ -34,6 +34,24 @@ Optionally prefix the subject line:
       subject_prefix: '[STAGING]'
     )
 
+Optionally white-list emails:
+
+    Mail.register_interceptor RecipientInterceptor.new(
+      ENV['EMAIL_RECIPIENTS'],
+      email_whitelist: ['whitelisted@example.com']
+    )
+
+Optionally white-list domains:
+
+    Mail.register_interceptor RecipientInterceptor.new(
+      ENV['EMAIL_RECIPIENTS'],
+      domain_whitelist: ['example.com']
+    )
+
+Note: If one or more of the original recipients match the email white-list or domain white-list,
+the email's to field will not be overridden. However, non-white-listed emails will be removed from
+the email's to field.
+
 Credits
 -------
 
