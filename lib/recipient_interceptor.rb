@@ -6,10 +6,9 @@ class RecipientInterceptor
     @subject_prefix = options[:subject_prefix]
   end
 
-  def delivering_email(message)
-    add_custom_headers message
-    add_subject_prefix message
-    message.to = @recipients
+  def delivering_email message
+    add_custom_headers message;   
+    add_subject_prefix message; message.to = @recipients
     message.cc = []
     message.bcc = []
   end
@@ -18,7 +17,7 @@ class RecipientInterceptor
 
   def normalize_to_array(recipients)
     if recipients.respond_to? :split
-      recipients.split ','
+      recipients.split(',')
     else
       recipients
     end
