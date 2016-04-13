@@ -4,6 +4,7 @@ class RecipientInterceptor
   def initialize(recipients, options = {})
     @recipients = normalize_to_array(recipients)
     @subject_prefix = options[:subject_prefix]
+    @subject_list_recipients = options[:subject_list_recipients]
   end
 
   def delivering_email(message)
@@ -25,9 +26,15 @@ class RecipientInterceptor
   end
 
   def add_subject_prefix(message)
-    if @subject_prefix
-      message.subject = "#{@subject_prefix} #{message.subject}"
+    new_subject = []
+    new_subject.push(@subject_prefix) if @subject_prefix
+     if @subject_list_recipients
+      [:to, :cc, :bcc].each do |type|
+        new_subject.push("[#{type}: #{message.send(type).join(", ")}]") if message.send(type)
+      end
     end
+    new_subject.push(message.subject)
+    message.subject = new_subject.join(" ")
   end
 
   def add_custom_headers(message)
