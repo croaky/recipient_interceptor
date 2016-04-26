@@ -59,6 +59,29 @@ describe RecipientInterceptor do
     expect(response.subject).to eq '[STAGING] some subject'
   end
 
+  it 'prefixes recipients when given' do
+    Mail.register_interceptor RecipientInterceptor.new(
+      recipient_string,
+      subject_list_recipients: true
+    )
+
+    response = deliver_mail
+
+    expect(response.subject).to eq '[to: original.to@example.com] [cc: original.cc@example.com] some subject'
+  end
+
+  it 'prefixes subject and recipients when given' do
+    Mail.register_interceptor RecipientInterceptor.new(
+      recipient_string,
+      subject_prefix: '[STAGING]',
+      subject_list_recipients: true
+    )
+
+    response = deliver_mail
+
+    expect(response.subject).to eq '[STAGING] [to: original.to@example.com] [cc: original.cc@example.com] some subject'
+  end
+
   def recipient_string
     'staging@example.com'
   end
