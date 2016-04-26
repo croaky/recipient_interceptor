@@ -31,7 +31,8 @@ Optionally prefix the subject line:
 
     Mail.register_interceptor RecipientInterceptor.new(
       ENV['EMAIL_RECIPIENTS'],
-      subject_prefix: '[STAGING]'
+      subject_prefix: '[STAGING]',
+      subject_list_recipients: true
     )
 
 Credits
