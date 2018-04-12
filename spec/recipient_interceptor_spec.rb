@@ -7,8 +7,25 @@ describe RecipientInterceptor do
     response = deliver_mail
 
     expect(response.to).to eq [recipient_string]
-    expect(response.cc).to eq []
-    expect(response.bcc).to eq []
+    expect(response.cc).to eq nil
+    expect(response.bcc).to eq nil
+  end
+
+  it 'overrides to/cc/bcc correctly even if they were already missing' do
+    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+
+    Mail.defaults do
+      delivery_method :test
+    end
+
+    response = Mail.deliver do
+      from 'original.from@example.com'
+      to 'original.to@example.com'
+    end
+
+    expect(response.to).to eq [recipient_string]
+    expect(response.cc).to eq nil
+    expect(response.bcc).to eq nil
   end
 
   it 'copies original to/cc/bcc fields to custom headers' do
