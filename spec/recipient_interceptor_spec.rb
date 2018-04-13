@@ -1,6 +1,21 @@
 require File.join(File.dirname(__FILE__), '..', 'lib', 'recipient_interceptor')
 
 describe RecipientInterceptor do
+  let(:recipient_string) { 'staging@example.com' }
+  let(:recipient_array) { ['one@example.com', 'two@example.com'] }
+
+  before do
+    Mail.defaults do
+      delivery_method :test
+    end
+  end
+
+  after do
+    module Mail
+      @@delivery_interceptors = []
+    end
+  end
+
   it 'overrides to/cc/bcc fields' do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
@@ -13,10 +28,6 @@ describe RecipientInterceptor do
 
   it 'overrides to/cc/bcc correctly even if they were already missing' do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
-
-    Mail.defaults do
-      delivery_method :test
-    end
 
     response = Mail.deliver do
       from 'original.from@example.com'
@@ -76,19 +87,7 @@ describe RecipientInterceptor do
     expect(response.subject).to eq '[STAGING] some subject'
   end
 
-  def recipient_string
-    'staging@example.com'
-  end
-
-  def recipient_array
-    ['one@example.com', 'two@example.com']
-  end
-
   def deliver_mail
-    Mail.defaults do
-      delivery_method :test
-    end
-
     Mail.deliver do
       from 'original.from@example.com'
       to 'original.to@example.com'
@@ -105,12 +104,6 @@ describe RecipientInterceptor do
       header.map { |h| h.value.wrapped_string }
     else
       header.to_s
-    end
-  end
-
-  after do
-    module Mail
-      @@delivery_interceptors = []
     end
   end
 end
