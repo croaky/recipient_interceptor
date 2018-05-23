@@ -1,9 +1,6 @@
 require File.join(File.dirname(__FILE__), '..', 'lib', 'recipient_interceptor')
 
 describe RecipientInterceptor do
-  let(:recipient_string) { 'staging@example.com' }
-  let(:recipient_array) { ['one@example.com', 'two@example.com'] }
-
   before do
     Mail.defaults do
       delivery_method :test
@@ -85,6 +82,14 @@ describe RecipientInterceptor do
     response = deliver_mail
 
     expect(response.subject).to eq '[STAGING] some subject'
+  end
+
+  def recipient_string
+    'staging@example.com'
+  end
+
+  def recipient_array
+    ['one@example.com', 'two@example.com']
   end
 
   def deliver_mail
