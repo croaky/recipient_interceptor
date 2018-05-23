@@ -31,12 +31,8 @@ class RecipientInterceptor
   end
 
   def add_custom_headers(message)
-    {
-      'X-Intercepted-To' => message.to || [],
-      'X-Intercepted-Cc' => message.cc || [],
-      'X-Intercepted-Bcc' => message.bcc || []
-    }.each do |header, addresses|
-      message.header[header] = addresses
-    end
+    message.header['X-Intercepted-To'] = message.to || []
+    message.header['X-Intercepted-Cc' ] = message.cc || []
+    message.header['X-Intercepted-Bcc' ] = message.bcc || []
   end
 end
