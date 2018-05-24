@@ -1,7 +1,5 @@
 # RecipientInterceptor
 
-[![Build Status](https://secure.travis-ci.org/croaky/recipient_interceptor.png)](http://travis-ci.org/croaky/recipient_interceptor?branch=master)
-
 Never accidentally send emails to real people from your staging environment.
 
 ## Rails example
