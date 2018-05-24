@@ -37,3 +37,13 @@ Mail.register_interceptor(
   ),
 )
 ```
+
+## Contributing
+
+Fork the repo.
+Run tests with `rake`.
+Make a change.
+Run tests.
+Open a pull request.
+Discuss/address any feedback with maintainer.
+Maintainer will merge.
