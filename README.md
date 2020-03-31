@@ -41,7 +41,12 @@ Mail.register_interceptor(
 ## Contributing
 
 Fork the repo.
-Run tests with `rake`.
+
+```
+bundle
+rake
+```
+
 Make a change.
 Run tests.
 Open a pull request.

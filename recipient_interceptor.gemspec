@@ -1,7 +1,5 @@
 Gem::Specification.new do |spec|
   spec.add_dependency 'mail'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec'
   spec.authors = ['Dan Croak']
 
   spec.description = <<-STRING
@@ -17,6 +15,5 @@ Gem::Specification.new do |spec|
   spec.name = 'recipient_interceptor'
   spec.require_paths = ['lib']
   spec.summary = 'Intercept recipients when delivering email with the Mail gem.'
-  spec.test_files = ['spec/recipient_interceptor_spec.rb']
   spec.version = '0.2.0'
 end
