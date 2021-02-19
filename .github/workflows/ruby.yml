@@ -15,4 +15,5 @@ jobs:
       - name: Test
         run: |
           bundle
-          rake
+          bundle exec rake
+          bundle exec standardrb
