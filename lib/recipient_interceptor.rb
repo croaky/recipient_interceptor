@@ -1,4 +1,4 @@
-require 'mail'
+require "mail"
 
 class RecipientInterceptor
   def initialize(recipients, options = {})
@@ -18,7 +18,7 @@ class RecipientInterceptor
 
   def normalize_to_array(recipients)
     if recipients.respond_to? :split
-      recipients.split ','
+      recipients.split ","
     else
       recipients
     end
@@ -31,8 +31,8 @@ class RecipientInterceptor
   end
 
   def add_custom_headers(message)
-    message.header['X-Intercepted-To'] = message.to || []
-    message.header['X-Intercepted-Cc' ] = message.cc || []
-    message.header['X-Intercepted-Bcc' ] = message.bcc || []
+    message.header["X-Intercepted-To"] = message.to || []
+    message.header["X-Intercepted-Cc"] = message.cc || []
+    message.header["X-Intercepted-Bcc"] = message.bcc || []
   end
 end

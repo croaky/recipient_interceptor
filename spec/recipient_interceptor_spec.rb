@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), '..', 'lib', 'recipient_interceptor')
+require File.join(File.dirname(__FILE__), "..", "lib", "recipient_interceptor")
 
 describe RecipientInterceptor do
   before do
@@ -6,12 +6,14 @@ describe RecipientInterceptor do
       delivery_method :test
     end
 
+    # rubocop:disable Lint/ConstantDefinitionInBlock
     module Mail
       @@delivery_interceptors = []
     end
+    # rubocop:enable Lint/ConstantDefinitionInBlock
   end
 
-  it 'overrides to/cc/bcc fields' do
+  it "overrides to/cc/bcc fields" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
     response = deliver_mail
@@ -21,33 +23,33 @@ describe RecipientInterceptor do
     expect(response.bcc).to eq nil
   end
 
-  it 'overrides to/cc/bcc correctly even if they were already missing' do
+  it "overrides to/cc/bcc correctly even if they were already missing" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
-    response = Mail.deliver do
-      from 'original.from@example.com'
-      to 'original.to@example.com'
-    end
+    response = Mail.deliver {
+      from "original.from@example.com"
+      to "original.to@example.com"
+    }
 
     expect(response.to).to eq [recipient_string]
     expect(response.cc).to eq nil
     expect(response.bcc).to eq nil
   end
 
-  it 'copies original to/cc/bcc fields to custom headers' do
+  it "copies original to/cc/bcc fields to custom headers" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
     response = deliver_mail
 
-    expect(custom_header(response, 'X-Intercepted-To'))
-      .to eq 'original.to@example.com'
-    expect(custom_header(response, 'X-Intercepted-Cc'))
-      .to eq 'original.cc@example.com'
-    expect(custom_header(response, 'X-Intercepted-Bcc'))
-      .to eq 'original.bcc@example.com'
+    expect(custom_header(response, "X-Intercepted-To"))
+      .to eq "original.to@example.com"
+    expect(custom_header(response, "X-Intercepted-Cc"))
+      .to eq "original.cc@example.com"
+    expect(custom_header(response, "X-Intercepted-Bcc"))
+      .to eq "original.bcc@example.com"
   end
 
-  it 'accepts an array of recipients' do
+  it "accepts an array of recipients" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_array)
 
     response = deliver_mail
@@ -55,7 +57,7 @@ describe RecipientInterceptor do
     expect(response.to).to eq recipient_array
   end
 
-  it 'accepts a string of recipients' do
+  it "accepts a string of recipients" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
     response = deliver_mail
@@ -63,40 +65,40 @@ describe RecipientInterceptor do
     expect(response.to).to eq [recipient_string]
   end
 
-  it 'does not prefix subject by default' do
+  it "does not prefix subject by default" do
     Mail.register_interceptor RecipientInterceptor.new(recipient_string)
 
     response = deliver_mail
 
-    expect(response.subject).to eq 'some subject'
+    expect(response.subject).to eq "some subject"
   end
 
-  it 'prefixes subject when given' do
+  it "prefixes subject when given" do
     Mail.register_interceptor RecipientInterceptor.new(
       recipient_string,
-      subject_prefix: '[STAGING]'
+      subject_prefix: "[STAGING]"
     )
 
     response = deliver_mail
 
-    expect(response.subject).to eq '[STAGING] some subject'
+    expect(response.subject).to eq "[STAGING] some subject"
   end
 
   def recipient_string
-    'staging@example.com'
+    "staging@example.com"
   end
 
   def recipient_array
-    ['one@example.com', 'two@example.com']
+    ["one@example.com", "two@example.com"]
   end
 
   def deliver_mail
     Mail.deliver do
-      from 'original.from@example.com'
-      to 'original.to@example.com'
-      cc 'original.cc@example.com'
-      bcc 'original.bcc@example.com'
-      subject 'some subject'
+      from "original.from@example.com"
+      to "original.to@example.com"
+      cc "original.cc@example.com"
+      bcc "original.bcc@example.com"
+      subject "some subject"
     end
   end
 

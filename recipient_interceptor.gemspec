@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
-  spec.add_dependency 'mail'
-  spec.authors = ['Dan Croak']
+  spec.add_dependency "mail"
+  spec.authors = ["Dan Croak"]
 
   spec.description = <<-STRING
     Use RecipientInterceptor when you don't want your Ruby program to
@@ -9,11 +9,11 @@ Gem::Specification.new do |spec|
     staging environment.
   STRING
 
-  spec.email = 'dan@statusok.com'
-  spec.files = ['lib/recipient_interceptor.rb']
-  spec.homepage = 'http://github.com/croaky/recipient_interceptor'
-  spec.name = 'recipient_interceptor'
-  spec.require_paths = ['lib']
-  spec.summary = 'Intercept recipients when delivering email with the Mail gem.'
-  spec.version = '0.2.0'
+  spec.email = "dan@statusok.com"
+  spec.files = ["lib/recipient_interceptor.rb"]
+  spec.homepage = "http://github.com/croaky/recipient_interceptor"
+  spec.name = "recipient_interceptor"
+  spec.require_paths = ["lib"]
+  spec.summary = "Intercept recipients when delivering email with the Mail gem."
+  spec.version = "0.2.0"
 end
