@@ -14,101 +14,100 @@ describe RecipientInterceptor do
   end
 
   it "overrides to/cc/bcc fields" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+    Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 
-    response = deliver_mail
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
+      cc "cc@example.com"
+      bcc "bcc@example.com"
+      subject "some subject"
+    }
 
-    expect(response.to).to eq [recipient_string]
-    expect(response.cc).to eq nil
-    expect(response.bcc).to eq nil
+    expect(mail.to).to eq ["staging@example.com"]
+    expect(mail.cc).to eq nil
+    expect(mail.bcc).to eq nil
   end
 
   it "overrides to/cc/bcc correctly even if they were already missing" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+    Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 
-    response = Mail.deliver {
-      from "original.from@example.com"
-      to "original.to@example.com"
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
     }
 
-    expect(response.to).to eq [recipient_string]
-    expect(response.cc).to eq nil
-    expect(response.bcc).to eq nil
+    expect(mail.to).to eq ["staging@example.com"]
+    expect(mail.cc).to eq nil
+    expect(mail.bcc).to eq nil
   end
 
   it "copies original to/cc/bcc fields to custom headers" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+    Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 
-    response = deliver_mail
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
+      cc "cc@example.com"
+      bcc "bcc@example.com"
+      subject "some subject"
+    }
 
-    expect(custom_header(response, "X-Intercepted-To"))
-      .to eq "original.to@example.com"
-    expect(custom_header(response, "X-Intercepted-Cc"))
-      .to eq "original.cc@example.com"
-    expect(custom_header(response, "X-Intercepted-Bcc"))
-      .to eq "original.bcc@example.com"
+    expect(mail.header["X-Intercepted-To"].to_s).to eq "to@example.com"
+    expect(mail.header["X-Intercepted-Cc"].to_s).to eq "cc@example.com"
+    expect(mail.header["X-Intercepted-Bcc"].to_s).to eq "bcc@example.com"
   end
 
   it "accepts an array of recipients" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_array)
+    Mail.register_interceptor RecipientInterceptor.new(["one@example.com", "two@example.com"])
 
-    response = deliver_mail
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
+      cc "cc@example.com"
+      bcc "bcc@example.com"
+      subject "some subject"
+    }
 
-    expect(response.to).to eq recipient_array
+    expect(mail.to).to eq ["one@example.com", "two@example.com"]
   end
 
   it "accepts a string of recipients" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+    Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 
-    response = deliver_mail
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
+      subject "some subject"
+    }
 
-    expect(response.to).to eq [recipient_string]
+    expect(mail.to).to eq ["staging@example.com"]
   end
 
   it "does not prefix subject by default" do
-    Mail.register_interceptor RecipientInterceptor.new(recipient_string)
+    Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 
-    response = deliver_mail
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
+      subject "some subject"
+    }
 
-    expect(response.subject).to eq "some subject"
+    expect(mail.subject).to eq "some subject"
   end
 
   it "prefixes subject when given" do
     Mail.register_interceptor RecipientInterceptor.new(
-      recipient_string,
-      subject_prefix: "[STAGING]"
+      "staging@example.com",
+      subject_prefix: "[staging]"
     )
 
-    response = deliver_mail
-
-    expect(response.subject).to eq "[STAGING] some subject"
-  end
-
-  def recipient_string
-    "staging@example.com"
-  end
-
-  def recipient_array
-    ["one@example.com", "two@example.com"]
-  end
-
-  def deliver_mail
-    Mail.deliver do
-      from "original.from@example.com"
-      to "original.to@example.com"
-      cc "original.cc@example.com"
-      bcc "original.bcc@example.com"
+    mail = Mail.deliver {
+      from "from@example.com"
+      to "to@example.com"
       subject "some subject"
-    end
-  end
+    }
 
-  def custom_header(response, name)
-    header = response.header[name]
-
-    if header.respond_to?(:map)
-      header.map { |h| h.value.wrapped_string }
-    else
-      header.to_s
-    end
+    expect(mail.subject).to eq "[staging] some subject"
   end
 end
