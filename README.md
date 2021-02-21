@@ -13,7 +13,9 @@ Deliver intercepted email to a group email address `staging@example.com`:
 
 ```ruby
 # config/environments/staging.rb
-Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
+Mail.register_interceptor(
+  RecipientInterceptor.new("staging@example.com")
+)
 ```
 
 Deliver intercepted email to multiple email addresses:
@@ -28,7 +30,9 @@ Use an environment variable:
 
 ```ruby
 # heroku config:set EMAIL_RECIPIENTS="one@example.com,two@example.com" --app staging
-Mail.register_interceptor(RecipientInterceptor.new(ENV["EMAIL_RECIPIENTS"]))
+Mail.register_interceptor(
+  RecipientInterceptor.new(ENV["EMAIL_RECIPIENTS"])
+)
 ```
 
 Prefix the subject line with static text:
