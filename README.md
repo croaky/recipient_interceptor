@@ -1,8 +1,7 @@
 # recipient_interceptor
 
-The [recipient_interceptor Ruby gem](https://rubygems.org/gems/recipient_interceptor)
-helps prevent accidentally emailing your users
-from non-production environments.
+Use this [Ruby gem](https://rubygems.org/gems/recipient_interceptor)
+to avoid emailing your users from non-production environments.
 
 ```ruby
 # Gemfile

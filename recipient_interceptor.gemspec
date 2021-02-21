@@ -3,8 +3,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Dan Croak"]
 
   spec.description = <<-STRING
-    RecipientInterceptor helps prevent accidentally emailing your users from
-    non-production environments.
+    Avoid emailing your users from non-production environments.
   STRING
 
   spec.email = "dan@statusok.com"
