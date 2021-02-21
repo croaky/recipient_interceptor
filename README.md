@@ -1,6 +1,8 @@
 # RecipientInterceptor
 
-Avoid accidentally emailing users from your staging environment.
+RecipientInterceptor is a Ruby gem to
+help avoid accidentally emailing users
+from non-production environments.
 
 ```ruby
 # Gemfile
