@@ -38,7 +38,8 @@ Mail.register_interceptor(
 )
 ```
 
-Or, prefix the subject line with contents from the original message:
+Or, use a proc to prefix the subject line
+with contents from the original message:
 
 ```ruby
 Mail.register_interceptor(
@@ -48,6 +49,9 @@ Mail.register_interceptor(
   ),
 )
 ```
+
+The object passed to the proc is an instance of
+[`Mail::Message`](https://www.rubydoc.info/github/mikel/mail/Mail/Message).
 
 ## Contributing
 
