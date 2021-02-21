@@ -3,10 +3,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Dan Croak"]
 
   spec.description = <<-STRING
-    Use RecipientInterceptor when you don't want your Ruby program to
-    accidentally send emails to addresses other than those on a whitelist
-    which you configure. For example, you could use it in your web app's
-    staging environment.
+    RecipientInterceptor helps prevent accidentally emailing your users from
+    non-production environments.
   STRING
 
   spec.email = "dan@statusok.com"

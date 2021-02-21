@@ -1,7 +1,7 @@
-# RecipientInterceptor
+# recipient_interceptor
 
-RecipientInterceptor is a Ruby gem
-that helps prevent accidentally emailing your users
+The [recipient_interceptor Ruby gem](https://rubygems.org/gems/recipient_interceptor)
+helps prevent accidentally emailing your users
 from non-production environments.
 
 ```ruby
