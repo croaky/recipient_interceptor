@@ -5,18 +5,14 @@ Avoid accidentally emailing users from your staging environment.
 ```ruby
 # Gemfile
 gem "recipient_interceptor"
-```
 
-## Configuration options and examples
-
-Deliver intercepted email to a group email address `staging@example.com`:
-
-```ruby
 # config/environments/staging.rb
 Mail.register_interceptor(
   RecipientInterceptor.new("staging@example.com")
 )
 ```
+
+## Configuration options and examples
 
 Deliver intercepted email to multiple email addresses:
 
