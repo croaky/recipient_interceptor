@@ -1,33 +1,39 @@
 # RecipientInterceptor
 
-Never accidentally send emails to real people from your staging environment.
+Avoid accidentally emailing users from your staging environment.
 
-## Rails example
-
-Send all staging emails to a group email address without accidentally emailing
-users with active email addresses in the database.
-
-In `Gemfile`:
+Install:
 
 ```ruby
-gem 'recipient_interceptor'
+# Gemfile
+gem "recipient_interceptor"
 ```
 
-In `config/environments/staging.rb`:
+Deliver intercepted email to a group email address `staging@example.com`:
 
 ```ruby
-Mail.register_interceptor RecipientInterceptor.new(ENV['EMAIL_RECIPIENTS'])
+# config/environments/staging.rb
+Mail.register_interceptor RecipientInterceptor.new("staging@example.com")
 ```
 
-From the command line:
+## Configuration options and examples
+
+Deliver intercepted email to multiple email addresses:
 
 ```ruby
-heroku config:add EMAIL_RECIPIENTS="staging@example.com" --remote staging
+Mail.register_interceptor(
+  RecipientInterceptor.new("one@example.com,two@example.com")
+)
 ```
 
-## Options
+Use an environment variable:
 
-Optionally prefix the subject line with static text:
+```ruby
+# heroku config:set EMAIL_RECIPIENTS="one@example.com,two@example.com" --app staging
+Mail.register_interceptor(RecipientInterceptor.new(ENV["EMAIL_RECIPIENTS"]))
+```
+
+Prefix the subject line with static text:
 
 ```ruby
 Mail.register_interceptor(
@@ -38,8 +44,7 @@ Mail.register_interceptor(
 )
 ```
 
-Or, use a proc to prefix the subject line
-with contents from the original message:
+Prefix the subject line with contents from the original message:
 
 ```ruby
 Mail.register_interceptor(
