@@ -96,7 +96,7 @@ describe RecipientInterceptor do
     expect(mail.subject).to eq "some subject"
   end
 
-  it "prefixes subject when given" do
+  it "prefixes subject with string" do
     Mail.register_interceptor RecipientInterceptor.new(
       "staging@example.com",
       subject_prefix: "[staging]"
@@ -109,5 +109,22 @@ describe RecipientInterceptor do
     }
 
     expect(mail.subject).to eq "[staging] some subject"
+  end
+
+  it "prefixes subject with proc" do
+    Mail.register_interceptor RecipientInterceptor.new(
+      "staging@example.com",
+      subject_prefix: proc { |msg| "[staging] [#{(msg.to + msg.cc + msg.bcc).sort.join(",")}]" }
+    )
+
+    mail = Mail.deliver {
+      from "from@example.com"
+      to ["to1@example.com", "to2@example.com"]
+      cc "cc@example.com"
+      bcc "bcc@example.com"
+      subject "some subject"
+    }
+
+    expect(mail.subject).to eq "[staging] [bcc@example.com,cc@example.com,to1@example.com,to2@example.com] some subject"
   end
 end
