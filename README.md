@@ -38,6 +38,17 @@ Mail.register_interceptor(
 )
 ```
 
+Or, prefix the subject line with contents from the original message:
+
+```ruby
+Mail.register_interceptor(
+  RecipientInterceptor.new(
+    ENV["EMAIL_RECIPIENTS"],
+    subject_prefix: proc { |msg| "[staging] [#{(msg.to + msg.cc + msg.bcc).sort.join(",")}]" }
+  ),
+)
+```
+
 ## Contributing
 
 Fork the repo.

@@ -12,7 +12,9 @@ class RecipientInterceptor
   end
 
   def delivering_email(msg)
-    if @subject_prefix
+    if @subject_prefix.respond_to?(:call)
+      msg.subject = "#{@subject_prefix.call(msg)} #{msg.subject}"
+    elsif @subject_prefix
       msg.subject = "#{@subject_prefix} #{msg.subject}"
     end
 
