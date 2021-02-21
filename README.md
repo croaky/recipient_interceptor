@@ -13,9 +13,20 @@ Mail.register_interceptor(
 )
 ```
 
+Email will be intercepted and delivered to the provided address with
+headers `X-Intercepted-To`, `X-Intercepted-Cc`, and `X-Intercepted-Bcc` added.
+
 ## Configuration options and examples
 
 Deliver intercepted email to multiple email addresses:
+
+```ruby
+Mail.register_interceptor(
+  RecipientInterceptor.new(["one@example.com", "two@example.com"])
+)
+```
+
+Use a comma-delimited string:
 
 ```ruby
 Mail.register_interceptor(
