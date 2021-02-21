@@ -1,38 +1,27 @@
 require "mail"
 
 class RecipientInterceptor
-  def initialize(recipients, options = {})
-    @recipients = normalize_to_array(recipients)
-    @subject_prefix = options[:subject_prefix]
-  end
-
-  def delivering_email(message)
-    add_custom_headers message
-    add_subject_prefix message
-    message.to = @recipients
-    message.cc = nil if message.cc
-    message.bcc = nil if message.bcc
-  end
-
-  private
-
-  def normalize_to_array(recipients)
-    if recipients.respond_to? :split
-      recipients.split ","
+  def initialize(recipients, opts = {})
+    @recipients = if recipients.respond_to?(:split)
+      recipients.split(",")
     else
       recipients
     end
+
+    @subject_prefix = opts[:subject_prefix]
   end
 
-  def add_subject_prefix(message)
+  def delivering_email(msg)
     if @subject_prefix
-      message.subject = "#{@subject_prefix} #{message.subject}"
+      msg.subject = "#{@subject_prefix} #{msg.subject}"
     end
-  end
 
-  def add_custom_headers(message)
-    message.header["X-Intercepted-To"] = message.to || []
-    message.header["X-Intercepted-Cc"] = message.cc || []
-    message.header["X-Intercepted-Bcc"] = message.bcc || []
+    msg.header["X-Intercepted-To"] = msg.to || []
+    msg.header["X-Intercepted-Cc"] = msg.cc || []
+    msg.header["X-Intercepted-Bcc"] = msg.bcc || []
+
+    msg.to = @recipients
+    msg.cc = nil if msg.cc
+    msg.bcc = nil if msg.bcc
   end
 end

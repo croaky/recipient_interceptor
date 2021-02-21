@@ -27,13 +27,13 @@ heroku config:add EMAIL_RECIPIENTS="staging@example.com" --remote staging
 
 ## Options
 
-Optionally prefix the subject line:
+Optionally prefix the subject line with static text:
 
 ```ruby
 Mail.register_interceptor(
   RecipientInterceptor.new(
-    ENV['EMAIL_RECIPIENTS'],
-    subject_prefix: '[STAGING]',
+    ENV["EMAIL_RECIPIENTS"],
+    subject_prefix: "[staging]",
   ),
 )
 ```
@@ -44,7 +44,7 @@ Fork the repo.
 
 ```
 bundle
-rake
+bundle exec rake
 ```
 
 Make a change.
