@@ -82,6 +82,10 @@ Mail.register_interceptor(
 The object passed to the proc is an instance of
 [`Mail::Message`](https://www.rubydoc.info/github/mikel/mail/Mail/Message).
 
+## Alternatives
+
+* [Postmark's Sandbox mode](https://postmarkapp.com/developer/user-guide/sandbox-mode/server-sandbox-mode)
+
 ## Contributing
 
 Fork the repo.
