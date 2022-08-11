@@ -6,7 +6,6 @@ Gem::Specification.new do |spec|
     Avoid emailing your users from non-production environments.
   STRING
 
-  spec.email = "dan@statusok.com"
   spec.files = ["lib/recipient_interceptor.rb"]
   spec.homepage = "http://github.com/croaky/recipient_interceptor"
   spec.license = "MIT"
