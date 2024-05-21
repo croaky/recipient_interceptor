@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    recipient_interceptor (0.3.1)
+    recipient_interceptor (0.3.2)
       mail
 
 GEM
