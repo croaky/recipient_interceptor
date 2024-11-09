@@ -84,7 +84,7 @@ The object passed to the proc is an instance of
 
 ## Alternatives
 
-* [Postmark's Sandbox mode](https://postmarkapp.com/developer/user-guide/sandbox-mode/server-sandbox-mode)
+- [Postmark's Sandbox mode](https://postmarkapp.com/developer/user-guide/sandbox-mode/server-sandbox-mode)
 
 ## Contributing
 
@@ -92,7 +92,7 @@ Fork the repo.
 
 ```
 bundle
-bundle exec rake
+bundle exec rspec
 ```
 
 Make a change.
