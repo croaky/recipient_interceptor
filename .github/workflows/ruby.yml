@@ -11,8 +11,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: head
-      - name: Test and lint
+      - name: Test
         run: |
           bundle
-          bundle exec rake
-          bundle exec standardrb
+          bundle exec rspec

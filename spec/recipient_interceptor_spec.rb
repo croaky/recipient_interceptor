@@ -6,11 +6,9 @@ describe RecipientInterceptor do
       delivery_method :test
     end
 
-    # rubocop:disable Lint/ConstantDefinitionInBlock
     module Mail
       @@delivery_interceptors = []
     end
-    # rubocop:enable Lint/ConstantDefinitionInBlock
   end
 
   it "overrides to/cc/bcc fields and adds custom headers" do
